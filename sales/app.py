@@ -15,6 +15,13 @@ def dat():
 
 with ui.layout_columns():
     
-    @render.data_frame
-    def data():
-        return dat()
+    @render_plotly
+    def plot1():
+        df = dat()
+        top_sales = df.groupby('product')['quantity_ordered'].sum().nlargest(5).reset_index()
+        return px.bar(top_sales, x='product', y='quantity_ordered', color='product', title='Top 5 Products by Quantity Sold')
+        
+        
+    #@render.data_frame
+    #def data():
+    #    return dat()
