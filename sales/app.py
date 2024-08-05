@@ -7,6 +7,7 @@ from shiny.express import render, input, ui
 from shinywidgets import render_plotly
 
 ui.page_opts(title="Sales Dashboard - 1 of 5", fillable=True)
+ui.input_numeric("n", 'Number of Products', value=5, min=0, max=20)
 
 @reactive.calc
 def dat():
@@ -18,7 +19,7 @@ with ui.layout_columns():
     @render_plotly
     def plot1():
         df = dat()
-        top_sales = df.groupby('product')['quantity_ordered'].sum().nlargest(5).reset_index()
+        top_sales = df.groupby('product')['quantity_ordered'].sum().nlargest(input.n()).reset_index()
         return px.bar(top_sales, x='product', y='quantity_ordered', color='product', title='Top 5 Products by Quantity Sold')
         
         
